@@ -42,15 +42,9 @@ def action(state):
     
 def print_states(states):
     array_of_states = []
-    if isinstance(states, list) == True:
-        for each in states:
-            array_of_states.append(each.state)
-        print(array_of_states)
-        return array_of_states
-    else:
-        print(states.state)
-        return states.state
-
+    for each in states:
+        array_of_states.append(each.state)
+    return array_of_states
 
 # --------------------------- Main Method --------------------------- #
 # Checks each state; explores the next actions
@@ -63,14 +57,13 @@ current_state = state_one
 
 while not clean_world:
 
-    print("Current state:", print_states(current_state))
-
+    print("\nCurrent state:", current_state.state)
     # If current state is the goal state then world is clean!
     if current_state in goal_state:
         clean_world = True
         print("The world is finally clean!")
     
-    print("\n  =( The world is not clean yet ########## \n")
+    print("\nThe world is not clean yet\n")
 
     # If frontier is empty -> fail
     if not frontier:
@@ -78,28 +71,29 @@ while not clean_world:
 
     # Remove first state from oldest frontier then add it to explored item
     # Then we check which next child states are available
+
     frontier.popleft()
     explored.append(current_state)
-
-    print("States in frontier:", print_states(frontier))
-    print("States in explored:", print_states(explored))
-    
-
     next_states = action(current_state)
 
-    print("Child states:")
-    print_states(next_states)
+    print("Child states:", print_states(next_states))
+    
     # If any of these states are not in the explored or frontier
     # Then we can add them to current state
 
     for states in next_states:
-        if states not in frontier or states not in explored:
+        if states not in frontier and states not in explored:
             if states in goal_state: 
-                print( "Goal state found at state", states.state, ". World is clean!")
+                print( "\nWOOHOO!!! Goal state found after state", current_state.state,". World is clean!")
                 clean_world = True
                 break
             frontier.append(states)
-            current_state = states
             print("Adding state", states.state, "to frontier")
+
+    print("States in frontier:", print_states(frontier))
+    print("States explored:", print_states(explored))
+
+
+    current_state = frontier[0]
 
         
